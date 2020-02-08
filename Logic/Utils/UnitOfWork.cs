@@ -38,7 +38,7 @@ namespace Logic.Utils
             return await _dbContext.Set<TEntity>().FindAsync(id);
         }
 
-        internal void Save<TEntity>(TEntity entity)
+        internal void Add<TEntity>(TEntity entity)
             where TEntity : class
         {
             _dbContext.Set<TEntity>().Add(entity);
