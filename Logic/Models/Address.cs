@@ -9,7 +9,7 @@ namespace Logic.Models
         public          string      ZipCode     { get; private set; }
         public virtual  Customer    Customer    { get; private set; }
 
-        public Address() //For EF
+        private Address() //For EF
         {
 
         }

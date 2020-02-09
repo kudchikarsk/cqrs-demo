@@ -12,6 +12,11 @@ namespace Logic.Models
         public          int                     Age         { get; private set; }
         public virtual  ICollection<Address>    Addresses   { get; private set; }
 
+        private Customer() //For EF
+        {
+
+        }
+
         public Customer(
             string                  firstName   ,
             string                  lastName    ,

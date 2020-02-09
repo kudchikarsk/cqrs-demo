@@ -2,6 +2,7 @@
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
+using Logic.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 
@@ -12,8 +13,8 @@ namespace Logic.Utils
         private readonly DbContext _dbContext;
         private readonly IDbContextTransaction _transaction;
 
-        public UnitOfWork(DbContext dbContext)
-        {           
+        public UnitOfWork(ApplicationDbContext dbContext)
+        {
             _dbContext = dbContext;
             _transaction = _dbContext.Database.BeginTransaction();
         }
@@ -22,6 +23,7 @@ namespace Logic.Utils
         {
             try
             {
+                await _dbContext.SaveChangesAsync();
                 await _transaction.CommitAsync();
             }
             finally
@@ -30,12 +32,6 @@ namespace Logic.Utils
                 _dbContext.Dispose();
             }
 
-        }
-
-        public async Task<TEntity> GetAsync<TEntity, TKey>(TKey id)
-            where TEntity : class, IEntity<TKey>
-        {
-            return await _dbContext.Set<TEntity>().FindAsync(id);
         }
 
         public void Add<TEntity>(TEntity entity)
@@ -56,7 +52,7 @@ namespace Logic.Utils
             _dbContext.Set<TEntity>().Remove(entity);
         }
 
-        public IQueryable<TEntity> Query<TEntity>()
+        public DbSet<TEntity> Query<TEntity>()
             where TEntity : class
         {
             return _dbContext.Set<TEntity>();

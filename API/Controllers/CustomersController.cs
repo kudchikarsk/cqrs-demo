@@ -17,67 +17,68 @@ namespace API.Controllers
     {
         private readonly UnitOfWork unitOfWork;
         private readonly IMapper mapper;
-        private readonly CustomerRespository insuranceRepository;
-        private readonly AddressesRepository nomineeRepository;
+        private readonly CustomerRespository customerRepository;
 
         public CustomersController(UnitOfWork unitOfWork, 
             IMapper mapper)
         {
             this.unitOfWork = unitOfWork;
             this.mapper = mapper;
-            insuranceRepository = new CustomerRespository(unitOfWork);
-            nomineeRepository = new AddressesRepository(unitOfWork);
+            customerRepository = new CustomerRespository(unitOfWork);
         }
 
         // GET: api/Customers
         [HttpGet]
         public IActionResult Get()
         {
-            var policies = insuranceRepository.GetAll();
-            return Ok(policies);
+            var customers = customerRepository.GetAll();
+            var customersDto = mapper.Map<List<CustomerDto>>(customers);
+            return Ok(customersDto);
         }
 
         // GET: api/Customers/5
         [HttpGet("{id}", Name = "Get")]
-        public IActionResult Get(long id)
+        public async Task<IActionResult> Get(long id)
         {
-            var policy = insuranceRepository.GetByIdAsync(id);
-            if (policy == null) return NotFound();
-            return Ok(policy);
+            var customer = await customerRepository.GetByIdAsync(id);
+            if (customer == null) return NotFound();
+
+            var customerDto = mapper.Map<CustomerDto>(customer);
+            return Ok(customerDto);
         }
 
         // POST: api/Customers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] CustomerDto value)
         {
-            var policy = new Customer(
+            var customer = new Customer(
                value.FirstName,
                value.LastName,
                value.Age,
                GetAddresses(value.Addresses)
                 );
 
-            insuranceRepository.Add(policy);
+            customerRepository.Add(customer);
             await unitOfWork.CommitAsync();
 
-            var policyDto = mapper.Map<CustomerDto>(policy);
-            return Created($"api/InsurancePolicy/{policy.Id}", policyDto);
+            var policyDto = mapper.Map<CustomerDto>(customer);
+            return Created($"api/InsurancePolicy/{customer.Id}", policyDto);
         }
 
         // PUT: api/Customers/5
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(long id, [FromBody] CustomerDto value)
         {
-            var policy = await insuranceRepository.GetByIdAsync(id);
-            if (policy == null) return NotFound();
-            policy.Update(
+            var customer = await customerRepository.GetByIdAsync(id);
+            if (customer == null) return NotFound();
+            customer.Update(
                 value.FirstName,
                 value.LastName,
                 value.Age,
                 GetAddresses(value.Addresses)
                 );
 
-            insuranceRepository.Update(policy);
+            customerRepository.Update(customer);
             await unitOfWork.CommitAsync();
 
             return NoContent();
@@ -87,10 +88,10 @@ namespace API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var policy = await insuranceRepository.GetByIdAsync(id);
-            if (policy == null) return NotFound();
+            var customer = await customerRepository.GetByIdAsync(id);
+            if (customer == null) return NotFound();
 
-            insuranceRepository.Delete(policy);
+            customerRepository.Delete(customer);
             await unitOfWork.CommitAsync();
 
             return NoContent();
@@ -98,8 +99,14 @@ namespace API.Controllers
 
         private ICollection<Address> GetAddresses(ICollection<AddressDto> addresses)
         {
-            var ids = addresses.Select(i => i.Id).ToArray();
-            return nomineeRepository.GetByIds(ids).ToList();
+            return addresses.Select(a =>
+            {
+                return new Address(
+                    a.Street,
+                    a.City,
+                    a.ZipCode
+                    );
+            }).ToList();
         }
     }
 }

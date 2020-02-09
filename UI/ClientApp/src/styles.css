@@ -14,3 +14,12 @@ code {
   background-color: #1b6ec2;
   border-color: #1861ac;
 }
+
+.card-table-body {
+  padding:0px;
+  
+}
+
+.card-table-body .table {
+    margin-bottom: 0px;
+}

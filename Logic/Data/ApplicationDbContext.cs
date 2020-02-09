@@ -6,9 +6,14 @@ using System.Text;
 
 namespace Logic.Data
 {
-    class ApplicationDbContext:DbContext
+    public class ApplicationDbContext:DbContext
     {
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Address> Addresses { get; set; }
+
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
+        {
+
+        }
     }
 }
