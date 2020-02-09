@@ -7,18 +7,18 @@ using System.Text;
 
 namespace Logic.Repositories
 {
-    public sealed class NomineeRepository
+    public sealed class AddressesRepository
     {
         private readonly UnitOfWork _unitOfWork;
 
-        public NomineeRepository(UnitOfWork unitOfWork)
+        public AddressesRepository(UnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
 
-        public IEnumerable<Nominee> GetNomiees(params long[] ids)
+        public IEnumerable<Address> GetByIds(params long[] ids)
         {
-            return _unitOfWork.Query<Nominee>()
+            return _unitOfWork.Query<Address>()
                     .Where(n => ids.Contains(n.Id))
                     .ToList();
         }

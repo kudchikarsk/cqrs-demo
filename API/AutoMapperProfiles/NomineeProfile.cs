@@ -12,7 +12,7 @@ namespace API.AutoMapperProfiles
     {
         public NomineeProfile()
         {
-            CreateMap<Nominee, NomineeDto>();
+            CreateMap<Address, AddressDto>();
         }
     }
 }

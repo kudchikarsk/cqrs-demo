@@ -8,7 +8,7 @@ namespace Logic.Data
 {
     class ApplicationDbContext:DbContext
     {
-        public DbSet<InsurancePolicy> InsurancePolicies { get; set; }
-        public DbSet<Nominee> Nominees { get; set; }
+        public DbSet<Customer> Customers { get; set; }
+        public DbSet<Address> Addresses { get; set; }
     }
 }

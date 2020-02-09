@@ -8,38 +8,38 @@ using System.Threading.Tasks;
 
 namespace Logic.Repositories
 {
-    public sealed class InsurancePolicyRespository
+    public sealed class CustomerRespository
     {
         private readonly UnitOfWork _unitOfWork;
 
-        public InsurancePolicyRespository(UnitOfWork unitOfWork)
+        public CustomerRespository(UnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
 
-        public Task<InsurancePolicy> GetByIdAsync(long id)
+        public Task<Customer> GetByIdAsync(long id)
         {
-            return _unitOfWork.GetAsync<InsurancePolicy, long>(id);
+            return _unitOfWork.GetAsync<Customer, long>(id);
         }
 
-        public void Add(InsurancePolicy insurancePolicy)
+        public void Add(Customer insurancePolicy)
         {
             _unitOfWork.Add(insurancePolicy);
         }
 
-        public void Update(InsurancePolicy insurancePolicy)
+        public void Update(Customer insurancePolicy)
         {
             _unitOfWork.Update(insurancePolicy);
         }
 
-        public void Delete(InsurancePolicy insurancePolicy)
+        public void Delete(Customer insurancePolicy)
         {
             _unitOfWork.Delete(insurancePolicy);
         }
 
-        public IEnumerable<InsurancePolicy> GetAll()
+        public IEnumerable<Customer> GetAll()
         {
-            return _unitOfWork.Query<InsurancePolicy>().ToList();
+            return _unitOfWork.Query<Customer>().ToList();
         }
 
         

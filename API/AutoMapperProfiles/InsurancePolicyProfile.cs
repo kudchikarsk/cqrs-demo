@@ -12,7 +12,7 @@ namespace API.AutoMapperProfiles
     {
         public InsurancePolicyProfile()
         {
-            CreateMap<InsurancePolicy, InsurancePolicyDto>();
+            CreateMap<Customer, CustomerDto>();
         }
     }
 }

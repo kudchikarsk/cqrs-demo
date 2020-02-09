@@ -13,22 +13,23 @@ namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class InsurancePolicyController : ControllerBase
+    public class CustomersController : ControllerBase
     {
         private readonly UnitOfWork unitOfWork;
         private readonly IMapper mapper;
-        private readonly InsurancePolicyRespository insuranceRepository;
-        private readonly NomineeRepository nomineeRepository;
+        private readonly CustomerRespository insuranceRepository;
+        private readonly AddressesRepository nomineeRepository;
 
-        public InsurancePolicyController(UnitOfWork unitOfWork, IMapper mapper)
+        public CustomersController(UnitOfWork unitOfWork, 
+            IMapper mapper)
         {
             this.unitOfWork = unitOfWork;
             this.mapper = mapper;
-            insuranceRepository = new InsurancePolicyRespository(unitOfWork);
-            nomineeRepository = new NomineeRepository(unitOfWork);
+            insuranceRepository = new CustomerRespository(unitOfWork);
+            nomineeRepository = new AddressesRepository(unitOfWork);
         }
 
-        // GET: api/InsurancePolicy
+        // GET: api/Customers
         [HttpGet]
         public IActionResult Get()
         {
@@ -36,7 +37,7 @@ namespace API.Controllers
             return Ok(policies);
         }
 
-        // GET: api/InsurancePolicy/5
+        // GET: api/Customers/5
         [HttpGet("{id}", Name = "Get")]
         public IActionResult Get(long id)
         {
@@ -45,35 +46,35 @@ namespace API.Controllers
             return Ok(policy);
         }
 
-        // POST: api/InsurancePolicy
+        // POST: api/Customers
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] InsurancePolicyDto value)
+        public async Task<IActionResult> Post([FromBody] CustomerDto value)
         {
-            var policy = new InsurancePolicy(
-                value.PolicyHolderName,
-                value.SumInsured,
-                value.PremiumAmount,
-                GetNominees(value.Nominees)
+            var policy = new Customer(
+               value.FirstName,
+               value.LastName,
+               value.Age,
+               GetAddresses(value.Addresses)
                 );
 
             insuranceRepository.Add(policy);
             await unitOfWork.CommitAsync();
 
-            var policyDto = mapper.Map<InsurancePolicyDto>(policy);
+            var policyDto = mapper.Map<CustomerDto>(policy);
             return Created($"api/InsurancePolicy/{policy.Id}", policyDto);
         }
 
-        // PUT: api/InsurancePolicy/5
+        // PUT: api/Customers/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(long id, [FromBody] InsurancePolicyDto value)
+        public async Task<IActionResult> Put(long id, [FromBody] CustomerDto value)
         {
             var policy = await insuranceRepository.GetByIdAsync(id);
             if (policy == null) return NotFound();
             policy.Update(
-                value.PolicyHolderName,
-                value.SumInsured,
-                value.PremiumAmount,
-                GetNominees(value.Nominees)
+                value.FirstName,
+                value.LastName,
+                value.Age,
+                GetAddresses(value.Addresses)
                 );
 
             insuranceRepository.Update(policy);
@@ -82,7 +83,7 @@ namespace API.Controllers
             return NoContent();
         }
 
-        // DELETE: api/InsurancePolicy/5
+        // DELETE: api/Customers/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
@@ -95,10 +96,10 @@ namespace API.Controllers
             return NoContent();
         }
 
-        private ICollection<Nominee> GetNominees(ICollection<NomineeDto> nominees)
+        private ICollection<Address> GetAddresses(ICollection<AddressDto> addresses)
         {
-            var ids = nominees.Select(i => i.Id).ToArray();
-            return nomineeRepository.GetNomiees(ids).ToList();
+            var ids = addresses.Select(i => i.Id).ToArray();
+            return nomineeRepository.GetByIds(ids).ToList();
         }
     }
 }

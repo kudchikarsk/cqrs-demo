@@ -32,25 +32,25 @@ namespace Logic.Utils
 
         }
 
-        internal async Task<TEntity> GetAsync<TEntity, TKey>(TKey id)
+        public async Task<TEntity> GetAsync<TEntity, TKey>(TKey id)
             where TEntity : class, IEntity<TKey>
         {
             return await _dbContext.Set<TEntity>().FindAsync(id);
         }
 
-        internal void Add<TEntity>(TEntity entity)
+        public void Add<TEntity>(TEntity entity)
             where TEntity : class
         {
             _dbContext.Set<TEntity>().Add(entity);
         }
 
-        internal void Update<TEntity>(TEntity entity)
+        public void Update<TEntity>(TEntity entity)
             where TEntity : class
         {
             _dbContext.Set<TEntity>().Update(entity);
         }
 
-        internal void Delete<TEntity>(TEntity entity)
+        public void Delete<TEntity>(TEntity entity)
             where TEntity : class
         {
             _dbContext.Set<TEntity>().Remove(entity);
