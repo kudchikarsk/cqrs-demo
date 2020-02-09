@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace API.AutoMapperProfiles
 {
-    public class NomineeProfile : Profile
+    public class AddressProfile : Profile
     {
-        public NomineeProfile()
+        public AddressProfile()
         {
             CreateMap<Address, AddressDto>();
         }

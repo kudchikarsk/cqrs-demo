@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace API.AutoMapperProfiles
 {
-    public class InsurancePolicyProfile :Profile
+    public class CustomerProfile :Profile
     {
-        public InsurancePolicyProfile()
+        public CustomerProfile()
         {
             CreateMap<Customer, CustomerDto>();
         }
