@@ -20,7 +20,7 @@ export class AddCustomerComponent implements OnInit {
     create() {
         this.customerService.create(this.customer)
             .subscribe((data) => {
-                this.router.navigateByUrl(`/view-customer/${data.Id}`);
+                this.router.navigateByUrl(`/view-customer/${data.id}`);
             }, (err) => {
                 alert(`Failed to create customer`);
                 console.log(err);

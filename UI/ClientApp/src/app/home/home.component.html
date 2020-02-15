@@ -8,16 +8,16 @@
       <thead>
         <tr>
           <th scope="col">#</th>
-          <th scope="col">First</th>
-          <th scope="col">Last</th>
+          <th scope="col">Name</th>
+          <th scope="col">Age</th>
           <th scope="col">Actions</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let customer of customers; let i = index">
           <th scope="row">{{i+1}}</th>
-          <td>{{customer.firstName}}</td>
-          <td>{{customer.lastName}}</td>
+          <td>{{customer.firstName}} {{customer.lastName}}</td>
+          <td>{{customer.age}}</td>
           <td>
             <a [routerLink]="['/view-customer', customer.id]" class="btn btn-primary mr-2">View</a>
             <a [routerLink]="['/edit-customer', customer.id]" class="btn btn-primary mr-2">Edit</a>

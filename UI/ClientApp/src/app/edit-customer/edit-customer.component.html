@@ -1,23 +1,34 @@
 <div class="container">
-  <form>
-    <div class="form-row">
-      <div class="form-group col-md-4">
-        <label for="firstName">First Name</label>
-        <input type="text" class="form-control" id="firstName" [(ngModel)]="customer.firstName" name="firstName">
-      </div>
-      <div class="form-group col-md-4">
-        <label for="lastName">Last Name</label>
-        <input type="text" class="form-control" id="lastName" [(ngModel)]="customer.lastName" name="lastName">
-      </div>
+  <div class="card-header">
+    <h5>Edit Customer </h5>
+  </div>
+  <div class="card">
+    <div class="card-body">
+      <form>
+        <div class="form-row">
+          <div class="form-group col-md-4">
+            <label for="firstName">First Name</label>
+            <input type="text" class="form-control" id="firstName" [(ngModel)]="customer.firstName" name="firstName">
+          </div>
+          <div class="form-group col-md-4">
+            <label for="lastName">Last Name</label>
+            <input type="text" class="form-control" id="lastName" [(ngModel)]="customer.lastName" name="lastName">
+          </div>
 
-      <div class="form-group col-md-4">
-        <label for="age">Age</label>
-        <input type="number" class="form-control" id="age" [(ngModel)]="customer.age" name="age">
-      </div>
+          <div class="form-group col-md-4">
+            <label for="age">Age</label>
+            <input type="number" class="form-control" id="age" [(ngModel)]="customer.age" name="age">
+          </div>
+        </div>
+
+
+        
+      </form>
     </div>
 
-
-    <button type="submit" class="btn btn-primary float-right" (click)="save()">Save</button>
-  </form>
+    <div class="card-footer">
+      <button type="submit" class="btn btn-primary float-right" (click)="save()">Save</button>
+    </div>
+  </div>
 
 </div>

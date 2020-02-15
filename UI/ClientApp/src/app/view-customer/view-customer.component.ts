@@ -8,7 +8,8 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./view-customer.component.css']
 })
 export class ViewCustomerComponent implements OnInit {
-    customer = {};
+    customer = { addresses:[] };
+    address = { };
     constructor(private customerService: CustomerService,
         private route: ActivatedRoute) { }
 
@@ -20,6 +21,30 @@ export class ViewCustomerComponent implements OnInit {
                 alert("Failed to load customer details");
                 console.log(err);
             });
-  }
+    }
 
+    addAddress() {
+        this.customerService.addAddress(this.route.snapshot.params.id, this.address)
+            .subscribe((data) => {
+                this.customer.addresses.push(data);
+                this.address = {};
+            }, (err) => {
+                alert("Failed to load customer details");
+                console.log(err);
+            });
+    }
+
+    removeAddress(address) {
+        this.customerService.removeAddress(this.route.snapshot.params.id, address.id)
+            .subscribe(() => {
+                var index = this.customer.addresses.indexOf(address);
+                if (index > -1) {
+                    this.customer.addresses.splice(index, 1);
+                    
+                }
+            }, (err) => {
+                alert("Failed to load customer details");
+                console.log(err);
+            });
+    }
 }
