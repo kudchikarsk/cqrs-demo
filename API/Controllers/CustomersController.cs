@@ -49,33 +49,54 @@ namespace API.Controllers
 
         // POST: api/Customers
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] CustomerDto value)
+        public async Task<IActionResult> Post([FromBody] CreateCustomerDto value)
         {
             var customer = new Customer(
                value.FirstName,
                value.LastName,
-               value.Age,
-               GetAddresses(value.Addresses)
+               value.Age
                 );
 
             customerRepository.Add(customer);
             await unitOfWork.CommitAsync();
 
-            var policyDto = mapper.Map<CustomerDto>(customer);
-            return Created($"api/InsurancePolicy/{customer.Id}", policyDto);
+            var customerDto = mapper.Map<CustomerDto>(customer);
+            return Created($"api/Customers/{customer.Id}", customerDto);
         }
+
+        // POST: api/Customers/5/Addresses
+        [HttpPost("{customerId}/Addresses")]
+        public async Task<IActionResult> PostAddress(long customerId, [FromBody] CreateAddressDto value)
+        {
+            var customer = await customerRepository.GetByIdAsync(customerId);
+            if (customer == null) return NotFound();
+
+            var address = new Address(
+                value.Street,
+                value.City,
+                value.ZipCode
+                );
+
+            customer.AddAddress(address);
+            customerRepository.Update(customer);
+            await unitOfWork.CommitAsync();
+
+            var addressDto = mapper.Map<AddressDto>(address);
+            return Ok(addressDto);
+        }
+
+
 
         // PUT: api/Customers/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(long id, [FromBody] CustomerDto value)
+        public async Task<IActionResult> Put(long id, [FromBody] EditCustomerDto value)
         {
             var customer = await customerRepository.GetByIdAsync(id);
             if (customer == null) return NotFound();
             customer.Update(
                 value.FirstName,
                 value.LastName,
-                value.Age,
-                GetAddresses(value.Addresses)
+                value.Age
                 );
 
             customerRepository.Update(customer);
@@ -97,16 +118,25 @@ namespace API.Controllers
             return NoContent();
         }
 
-        private ICollection<Address> GetAddresses(ICollection<AddressDto> addresses)
+        // DELETE: api/Customers/5/Addresses/1
+        [HttpDelete("{customerId}/Addresses/{addressId}")]
+        public async Task<IActionResult> DeleteAddress(long customerId, long addressId)
         {
-            return addresses.Select(a =>
-            {
-                return new Address(
-                    a.Street,
-                    a.City,
-                    a.ZipCode
-                    );
-            }).ToList();
+            var customer = await customerRepository.GetByIdAsync(customerId);
+            if (customer == null) return NotFound();
+
+            var address = customer.Addresses.SingleOrDefault(a => a.Id == addressId);
+            if (address == null) return NotFound();
+
+            customer.RemoveAddress(address);
+
+            customerRepository.Update(customer);
+            await unitOfWork.CommitAsync();
+
+            return NoContent();
         }
+
+
+
     }
 }

@@ -14,37 +14,39 @@ namespace Logic.Models
 
         private Customer() //For EF
         {
-
+            Addresses = new List<Address>();
         }
 
         public Customer(
             string                  firstName   ,
             string                  lastName    ,
-            int                     age         ,
-            ICollection<Address>    addresses   
-            )
+            int                     age         
+            ):base()
         {
             FirstName   = firstName   ;
             LastName    = lastName    ;
-            Age         = age         ;
-            Addresses   = addresses   ;
+            Age         = age         ;            
         }
 
         public void Update(
             string firstName,
             string lastName,
-            int age,
-            ICollection<Address> addresses
+            int age
             )
         {
             FirstName = firstName;
             LastName = lastName;
-            Age = age;
-            Addresses.Clear();
-            foreach (var address in addresses)
-            {
-                 Addresses.Add(address);
-            }
+            Age = age;            
+        }
+
+        public void AddAddress(Address address)
+        {
+            Addresses.Add(address);
+        }
+
+        public void RemoveAddress(Address address)
+        {
+            Addresses.Remove(address);
         }
     }
 }
