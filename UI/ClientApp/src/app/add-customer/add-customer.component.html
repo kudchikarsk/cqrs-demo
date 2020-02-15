@@ -9,6 +9,11 @@
         <label for="lastName">Last Name</label>
         <input type="text" class="form-control" id="lastName" [(ngModel)]="customer.lastName" name="lastName">
       </div>
+
+      <div class="form-group col-md-6">
+        <label for="age">Last Name</label>
+        <input type="number" class="form-control" id="age" [(ngModel)]="customer.age" name="age">
+      </div>
     </div>
 
 
@@ -32,6 +37,9 @@
           </div>
         </div>
 
+      </div>
+      <div class="card-footer">
+        <button type="submit" class="btn btn-danger float-right" (click)="removeAddress(address)">Remove</button>
       </div>
     </div>
     <button class="btn btn-primary d-block mx-auto" (click)="addAddress()">Add Address</button>

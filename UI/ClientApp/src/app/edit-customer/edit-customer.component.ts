@@ -23,6 +23,17 @@ export class EditCustomerComponent implements OnInit {
             });
     }
 
+    addAddress() {
+        this.customer.addresses.push({});
+    }
+
+    removeAddress(address) {
+        let index = this.customer.addresses.indexOf(address);
+        if (index > -1) {
+            this.customer.addresses.splice(index,1);
+        }        
+    }
+
     save() {
         this.customerService.update(this.route.snapshot.params.id, this.customer)
             .subscribe(() => {

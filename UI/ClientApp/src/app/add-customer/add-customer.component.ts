@@ -22,6 +22,13 @@ export class AddCustomerComponent implements OnInit {
         this.customer.addresses.push({});
     }
 
+    removeAddress(address) {
+        let index = this.customer.addresses.indexOf(address);
+        if (index > -1) {
+            this.customer.addresses.splice(index, 1);
+        }
+    }
+
     create() {
         this.customerService.create(this.customer)
             .subscribe((data) => {
