@@ -29,7 +29,7 @@ namespace API.Controllers
 
         // GET: api/Customers
         [HttpGet]
-        public IActionResult Get()
+        public IActionResult GetList()
         {
             var customers = customerRepository.GetAll();
             var customersDto = mapper.Map<List<CustomerDto>>(customers);
@@ -38,7 +38,7 @@ namespace API.Controllers
 
         // GET: api/Customers/5
         [HttpGet("{id}", Name = "Get")]
-        public async Task<IActionResult> Get(long id)
+        public async Task<IActionResult> GetCustomer(long id)
         {
             var customer = await customerRepository.GetByIdAsync(id);
             if (customer == null) return NotFound();
@@ -49,7 +49,7 @@ namespace API.Controllers
 
         // POST: api/Customers
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] CreateCustomerDto value)
+        public async Task<IActionResult> CreateCustomer([FromBody] CreateCustomerDto value)
         {
             var customer = new Customer(
                value.FirstName,
@@ -66,7 +66,7 @@ namespace API.Controllers
 
         // POST: api/Customers/5/Addresses
         [HttpPost("{customerId}/Addresses")]
-        public async Task<IActionResult> PostAddress(long customerId, [FromBody] CreateAddressDto value)
+        public async Task<IActionResult> AddAddress(long customerId, [FromBody] CreateAddressDto value)
         {
             var customer = await customerRepository.GetByIdAsync(customerId);
             if (customer == null) return NotFound();
@@ -89,7 +89,7 @@ namespace API.Controllers
 
         // PUT: api/Customers/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(long id, [FromBody] EditCustomerDto value)
+        public async Task<IActionResult> EditCustomerInfo(long id, [FromBody] EditCustomerDto value)
         {
             var customer = await customerRepository.GetByIdAsync(id);
             if (customer == null) return NotFound();
@@ -107,7 +107,7 @@ namespace API.Controllers
 
         // DELETE: api/Customers/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> DeleteCustomer(int id)
         {
             var customer = await customerRepository.GetByIdAsync(id);
             if (customer == null) return NotFound();
@@ -120,7 +120,7 @@ namespace API.Controllers
 
         // DELETE: api/Customers/5/Addresses/1
         [HttpDelete("{customerId}/Addresses/{addressId}")]
-        public async Task<IActionResult> DeleteAddress(long customerId, long addressId)
+        public async Task<IActionResult> RemoveAddress(long customerId, long addressId)
         {
             var customer = await customerRepository.GetByIdAsync(customerId);
             if (customer == null) return NotFound();
