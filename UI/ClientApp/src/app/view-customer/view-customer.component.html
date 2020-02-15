@@ -1,0 +1,66 @@
+<div class="card mb-4">
+  <div class="card-body">
+    <dl class="row">
+      <dt class="col-sm-3">Name</dt>
+      <dd class="col-sm-9">{{customer.firstName}} {{customer.lastName}}</dd>
+
+      <dt class="col-sm-3">Age</dt>
+      <dd class="col-sm-9">{{ customer.age }}</dd>
+
+    </dl>
+
+  </div>
+  <div class="card-footer text-muted">
+    <a [routerLink]="['/edit-customer', customer.id]" class="btn btn-secondary float-right">Edit</a>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-6" *ngFor="let address of customer.addresses">
+    <div class="card" style="height:250px;">
+      <div class="card-body">
+        <dl class="row">
+          <dt class="col-sm-3">Street</dt>
+          <dd class="col-sm-9">{{address.street}}</dd>
+
+          <dt class="col-sm-3">City</dt>
+          <dd class="col-sm-9">{{address.city}}</dd>
+
+          <dt class="col-sm-3">Zip Code</dt>
+          <dd class="col-sm-9">{{address.zipCode}}</dd>
+        </dl>
+      </div>
+      <div class="card-footer text-muted">
+        <button class="btn btn-danger float-right" (click)="removeAddress(address)">Remove</button>
+      </div>
+    </div>
+  </div>
+  <div class="col-6">
+    <div class="card p-5" style="height:250px;" *ngFor="let address of customer.addresses">
+      <button class="btn btn-secondary mx-auto my-5" data-toggle="modal" data-target="#exampleModal">Add</button>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>

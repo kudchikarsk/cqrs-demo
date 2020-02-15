@@ -9,6 +9,7 @@ import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { HomeComponent } from './home/home.component';
 import { AddCustomerComponent } from './add-customer/add-customer.component';
 import { EditCustomerComponent } from './edit-customer/edit-customer.component';
+import { ViewCustomerComponent } from './view-customer/view-customer.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { EditCustomerComponent } from './edit-customer/edit-customer.component';
     NavMenuComponent,
     HomeComponent,
     AddCustomerComponent,
-    EditCustomerComponent
+    EditCustomerComponent,
+    ViewCustomerComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -26,6 +28,7 @@ import { EditCustomerComponent } from './edit-customer/edit-customer.component';
         { path: '', component: HomeComponent, pathMatch: 'full' },
         { path: 'add-customer', component: AddCustomerComponent },
         { path: 'edit-customer/:id', component: EditCustomerComponent },
+        { path: 'view-customer/:id', component: ViewCustomerComponent },
     ])
   ],
   providers: [],

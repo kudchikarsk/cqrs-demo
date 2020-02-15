@@ -8,9 +8,7 @@ import { Router } from '@angular/router';
     styleUrls: ['./add-customer.component.css']
 })
 export class AddCustomerComponent implements OnInit {
-    customer = {
-        addresses: [{}]
-    };
+    customer = {};
 
     constructor(private customerService: CustomerService,
         private router: Router) { }
@@ -18,14 +16,11 @@ export class AddCustomerComponent implements OnInit {
     ngOnInit() {
     }
 
-    addAddress() {
-        this.customer.addresses.push({});
-    }
 
     create() {
         this.customerService.create(this.customer)
             .subscribe((data) => {
-                this.router.navigateByUrl(`/`);
+                this.router.navigateByUrl(`/view-customer/${data.Id}`);
             }, (err) => {
                 alert(`Failed to create customer`);
                 console.log(err);

@@ -30,4 +30,12 @@ export class CustomerService {
         return this.http.delete(`${environment.apiUrl}api/customers/${id}`);
     }
 
+    addAddress(customerId,address): Observable<any> {
+        return this.http.post(`${environment.apiUrl}api/customers/${customerId}/addresses`, address);
+    }
+
+    removeAddress(customerId, addressId): Observable<any> {
+        return this.http.delete(`${environment.apiUrl}api/customers/${customerId}/addresses/${addressId}`);
+    }
+
 }

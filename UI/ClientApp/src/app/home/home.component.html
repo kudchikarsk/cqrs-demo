@@ -19,6 +19,7 @@
           <td>{{customer.firstName}}</td>
           <td>{{customer.lastName}}</td>
           <td>
+            <a [routerLink]="['/view-customer', customer.id]" class="btn btn-primary mr-2">View</a>
             <a [routerLink]="['/edit-customer', customer.id]" class="btn btn-primary mr-2">Edit</a>
             <button class="btn btn-danger mr-2" (click)="delete(customer)">Delete</button>
           </td>

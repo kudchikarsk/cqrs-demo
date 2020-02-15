@@ -25,7 +25,11 @@
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "src/styles.css"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/jquery/dist/jquery.slim.js",
+              "node_modules/popper.js/dist/popper.min.js",
+              "node_modules/bootstrap/js/dist/bootstrap.min.js"
+            ]
           },
           "configurations": {
             "production": {

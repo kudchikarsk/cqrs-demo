@@ -1,40 +1,22 @@
 <div class="container">
   <form>
     <div class="form-row">
-      <div class="form-group col-md-6">
+      <div class="form-group col-md-4">
         <label for="firstName">First Name</label>
         <input type="text" class="form-control" id="firstName" [(ngModel)]="customer.firstName" name="firstName">
       </div>
-      <div class="form-group col-md-6">
+      <div class="form-group col-md-4">
         <label for="lastName">Last Name</label>
         <input type="text" class="form-control" id="lastName" [(ngModel)]="customer.lastName" name="lastName">
       </div>
-    </div>
 
-
-
-    <div class="card mb-2" *ngFor="let address of customer.addresses">
-      <div class="card-body">
-        <div class="form-row">
-          <div class="form-group col-md-6">
-            <label for="inputAddress">Address</label>
-            <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St" [(ngModel)]="address.street" name="street">
-          </div>
-
-          <div class="form-group col-md-4">
-            <label for="inputCity">City</label>
-            <input type="text" class="form-control" id="inputCity" placeholder="Boston" [(ngModel)]="address.city" name="city">
-          </div>
-
-          <div class="form-group col-md-2">
-            <label for="inputZip">Zip</label>
-            <input type="text" class="form-control" id="inputZip" placeholder="6789" [(ngModel)]="address.zipCode" name="zipCode">
-          </div>
-        </div>
-
+      <div class="form-group col-md-4">
+        <label for="age">Age</label>
+        <input type="number" class="form-control" id="age" [(ngModel)]="customer.age" name="age">
       </div>
     </div>
-    <button class="btn btn-primary d-block mx-auto" (click)="addAddress()">Add Address</button>
+
+
     <button type="submit" class="btn btn-primary float-right" (click)="save()">Save</button>
   </form>
 
