@@ -61,8 +61,8 @@ namespace API.Controllers
             customerRepository.Add(customer);
             await unitOfWork.CommitAsync();
 
-            var policyDto = mapper.Map<CustomerDto>(customer);
-            return Created($"api/InsurancePolicy/{customer.Id}", policyDto);
+            var customerDto = mapper.Map<CustomerDto>(customer);
+            return Created($"api/Customers/{customer.Id}", customerDto);
         }
 
         // PUT: api/Customers/5
