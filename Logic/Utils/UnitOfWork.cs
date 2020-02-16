@@ -23,8 +23,8 @@ namespace Logic.Utils
         {
             try
             {
-                await _dbContext.SaveChangesAsync();
-                await _transaction.CommitAsync();
+                 await _dbContext.SaveChangesAsync();
+                 await _transaction.CommitAsync();
             }
             finally
             {

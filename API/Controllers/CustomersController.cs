@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Logic.AppServices;
 using Logic.Dtos;
 using Logic.Models;
 using Logic.Repositories;
 using Logic.Utils;
 using Microsoft.AspNetCore.Mvc;
+using static Logic.AppServices.EditCustomerInfoCommand;
 
 namespace API.Controllers
 {
@@ -91,18 +93,20 @@ namespace API.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> EditCustomerInfo(long id, [FromBody] EditCustomerDto value)
         {
-            var customer = await customerRepository.GetByIdAsync(id);
-            if (customer == null) return NotFound();
-            customer.Update(
+            var command = new EditCustomerInfoCommand(id, 
                 value.FirstName,
                 value.LastName,
-                value.Age
+                value.Age);
+
+
+            var handler = new EditCustomerInfoCommandHandler(unitOfWork);
+            var result = await handler.Handle(command);
+
+            
+            return result.Match<ActionResult>(
+                (errors)=>BadRequest(errors),
+                (valid)=>NoContent()
                 );
-
-            customerRepository.Update(customer);
-            await unitOfWork.CommitAsync();
-
-            return NoContent();
         }
 
         // DELETE: api/Customers/5

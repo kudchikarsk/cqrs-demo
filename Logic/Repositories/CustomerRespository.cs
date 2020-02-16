@@ -18,9 +18,9 @@ namespace Logic.Repositories
             _unitOfWork = unitOfWork;
         }
 
-        public Task<Customer> GetByIdAsync(long id)
+        public async Task<Customer> GetByIdAsync(long id)
         {
-            return _unitOfWork.Query<Customer>()
+            return await _unitOfWork.Query<Customer>()
                 .Include(nameof(Customer.Addresses))
                 .SingleOrDefaultAsync(c=>c.Id == id);
         }
