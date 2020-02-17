@@ -26,7 +26,7 @@ namespace Logic.AppServices
         public string LastName { get; }
         public int Age { get; }
 
-        public sealed class EditCustomerInfoCommandHandler : IHandler<EditCustomerInfoCommand, Task<Validation<Unit>>>
+        public sealed class EditCustomerInfoCommandHandler : ICommandHandler<EditCustomerInfoCommand, Task<Validation<Unit>>>
         {
             private readonly UnitOfWork unitOfWork;
             private readonly CustomerRespository customerRepository;

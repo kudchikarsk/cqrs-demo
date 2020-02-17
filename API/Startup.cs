@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using LaYumba.Functional;
+using Logic;
+using Logic.AppServices;
 using Logic.Data;
 using Logic.Utils;
 using Microsoft.AspNetCore.Builder;
@@ -15,6 +18,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using static LaYumba.Functional.F;
+using static Logic.AppServices.EditCustomerInfoCommand;
+using Unit = System.ValueTuple;
 
 namespace API
 {
@@ -34,6 +40,8 @@ namespace API
             services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("ApplicationDbContext")));
             services.AddScoped<UnitOfWork>();
+            services.AddTransient<ICommandHandler<EditCustomerInfoCommand, Task<Validation<Unit>>>,
+                EditCustomerInfoCommandHandler>();
             services.AddCors(options =>
             {
                 options.AddPolicy(MyAllowSpecificOrigins,

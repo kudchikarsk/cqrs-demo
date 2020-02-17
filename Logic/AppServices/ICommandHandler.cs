@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace Logic.AppServices
 {
-    public interface IHandler<T, TOutput> where T : ICommand
+    public interface ICommandHandler<T, TOutput> where T : ICommand
     {
         TOutput Handle(T command);
     }
