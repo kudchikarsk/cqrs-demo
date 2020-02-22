@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace Logic.Repositories
 {
-    public sealed class CustomerRespository
+    public sealed class CustomerRepository
     {
         private readonly UnitOfWork _unitOfWork;
 
-        public CustomerRespository(UnitOfWork unitOfWork)
+        public CustomerRepository(UnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
@@ -40,9 +40,9 @@ namespace Logic.Repositories
             _unitOfWork.Delete(customer);
         }
 
-        public IReadOnlyCollection<Customer> GetAll()
+        public async Task<IReadOnlyCollection<Customer>> GetAll()
         {
-            return _unitOfWork.Query<Customer>().ToList();
+            return await _unitOfWork.Query<Customer>().ToListAsync();
         }
 
         

@@ -1,4 +1,5 @@
 ﻿using LaYumba.Functional;
+using Logic.Data;
 using Logic.Models;
 using Logic.Repositories;
 using Logic.Utils;
@@ -11,7 +12,7 @@ using Unit = System.ValueTuple;
 
 namespace Logic.AppServices
 {
-    public sealed class EditCustomerInfoCommand : ICommand
+    public sealed class EditCustomerInfoCommand : ICommand<Task<Validation<Unit>>>
     {
         public EditCustomerInfoCommand(long id, string firstName, string lastName, int age)
         {
@@ -28,17 +29,18 @@ namespace Logic.AppServices
 
         public sealed class EditCustomerInfoCommandHandler : ICommandHandler<EditCustomerInfoCommand, Task<Validation<Unit>>>
         {
-            private readonly UnitOfWork unitOfWork;
-            private readonly CustomerRespository customerRepository;
+            private readonly DbContextFactory dbContextFactory;
 
-            public EditCustomerInfoCommandHandler(UnitOfWork unitOfWork)
+            public EditCustomerInfoCommandHandler(DbContextFactory dbContextFactory)
             {
-                this.unitOfWork = unitOfWork;
-                customerRepository = new CustomerRespository(unitOfWork);
+                this.dbContextFactory = dbContextFactory;
             }
 
             public async Task<Validation<Unit>> Handle(EditCustomerInfoCommand command)
             {
+                var unitOfWork = new UnitOfWork(dbContextFactory);
+                var customerRepository = new CustomerRepository(unitOfWork);
+
                 var customer = await customerRepository.GetByIdAsync(command.Id);
                 if (customer == null) return Error("Customer not found!");
 

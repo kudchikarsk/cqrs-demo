@@ -7,6 +7,7 @@ using LaYumba.Functional;
 using Logic;
 using Logic.AppServices;
 using Logic.Data;
+using Logic.Models;
 using Logic.Utils;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -19,7 +20,13 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using static LaYumba.Functional.F;
+using static Logic.AppServices.AddAddressCommand;
+using static Logic.AppServices.CreateCustomerCommand;
+using static Logic.AppServices.DeleteCustomerCommand;
 using static Logic.AppServices.EditCustomerInfoCommand;
+using static Logic.AppServices.GetAllCustomerQuery;
+using static Logic.AppServices.GetCustomerQuery;
+using static Logic.AppServices.RemoveAddressCommand;
 using Unit = System.ValueTuple;
 
 namespace API
@@ -37,11 +44,31 @@ namespace API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ApplicationDbContext>(options =>
-            options.UseSqlServer(Configuration.GetConnectionString("ApplicationDbContext")));
-            services.AddScoped<UnitOfWork>();
+            var connectionString = new ConnectionString(
+                Configuration.GetConnectionString("ApplicationDbContext"));
+            services.AddSingleton<ConnectionString>(connectionString);
+            services.AddSingleton<DbContextFactory>();           
+            services.AddSingleton<Messages>();
+
+            //Handlers
+            services.AddTransient<ICommandHandler<CreateCustomerCommand, Task<Validation<Customer>>>,
+                CreateCustomerCommandHandler>();
             services.AddTransient<ICommandHandler<EditCustomerInfoCommand, Task<Validation<Unit>>>,
                 EditCustomerInfoCommandHandler>();
+            services.AddTransient<ICommandHandler<DeleteCustomerCommand, Task<Validation<Unit>>>,
+                DeleteCustomerCommandHandler>();
+            services.AddTransient<ICommandHandler<AddAddressCommand, Task<Validation<Address>>>,
+                AddAddressCommandHandler>();
+            services.AddTransient<ICommandHandler<RemoveAddressCommand, Task<Validation<Unit>>>,
+                RemoveAddressCommandHandler>();
+
+            //Queries
+            services.AddTransient<IQueryHandler<GetCustomerQuery, Task<Validation<Customer>>>,
+                GetCustomerQueryHandler>();
+            services.AddTransient<IQueryHandler<GetAllCustomerQuery, Task<Validation<IReadOnlyCollection<Customer>>>>,
+                GetAllCustomerQueryHandler>();
+
+
             services.AddCors(options =>
             {
                 options.AddPolicy(MyAllowSpecificOrigins,

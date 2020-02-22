@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using LaYumba.Functional;
+using static LaYumba.Functional.F;
+using Unit = System.ValueTuple;
 using Logic.AppServices;
 using Logic.Dtos;
 using Logic.Models;
@@ -17,74 +20,91 @@ namespace API.Controllers
     [ApiController]
     public class CustomersController : ControllerBase
     {
-        private readonly UnitOfWork unitOfWork;
+        private readonly Messages messages;
         private readonly IMapper mapper;
-        private readonly CustomerRespository customerRepository;
 
-        public CustomersController(UnitOfWork unitOfWork, 
-            IMapper mapper)
+        public CustomersController(Messages messages, IMapper mapper)
         {
-            this.unitOfWork = unitOfWork;
+            this.messages = messages;
             this.mapper = mapper;
-            customerRepository = new CustomerRespository(unitOfWork);
         }
 
         // GET: api/Customers
         [HttpGet]
-        public IActionResult GetList()
+        public async Task<IActionResult> GetList()
         {
-            var customers = customerRepository.GetAll();
-            var customersDto = mapper.Map<List<CustomerDto>>(customers);
-            return Ok(customersDto);
+            var query = new GetAllCustomerQuery();
+
+            var result = await messages.Dispatch(query);
+
+            return result.Match<IActionResult>(
+                (errors) => BadRequest(errors),
+                (customers) =>
+                {
+                    var customersDto = mapper.Map<List<CustomerDto>>(customers);
+                    return Ok(customersDto);
+                });
         }
 
         // GET: api/Customers/5
         [HttpGet("{id}", Name = "Get")]
         public async Task<IActionResult> GetCustomer(long id)
         {
-            var customer = await customerRepository.GetByIdAsync(id);
-            if (customer == null) return NotFound();
+            var query = new GetCustomerQuery(id);
 
-            var customerDto = mapper.Map<CustomerDto>(customer);
-            return Ok(customerDto);
+            var result = await messages.Dispatch(query);
+
+            return result.Match<IActionResult>(
+                (errors) => BadRequest(errors),
+                (customer) =>
+                {
+                    var customerDto = mapper.Map<CustomerDto>(customer);
+                    return Ok(customerDto);
+                });
         }
 
         // POST: api/Customers
         [HttpPost]
         public async Task<IActionResult> CreateCustomer([FromBody] CreateCustomerDto value)
         {
-            var customer = new Customer(
-               value.FirstName,
+
+
+            var command = new CreateCustomerCommand(value.FirstName,
                value.LastName,
-               value.Age
-                );
+               value.Age);
 
-            customerRepository.Add(customer);
-            await unitOfWork.CommitAsync();
+            var result = await messages.Dispatch(command);
 
-            var customerDto = mapper.Map<CustomerDto>(customer);
-            return Created($"api/Customers/{customer.Id}", customerDto);
+            return result.Match<IActionResult>(
+                (errors) => BadRequest(errors),
+                (customer) =>
+                {
+                    var customerDto = mapper.Map<CustomerDto>(customer);
+                    return Created($"api/Customers/{customer.Id}", customerDto);
+                });
         }
 
         // POST: api/Customers/5/Addresses
         [HttpPost("{customerId}/Addresses")]
         public async Task<IActionResult> AddAddress(long customerId, [FromBody] CreateAddressDto value)
         {
-            var customer = await customerRepository.GetByIdAsync(customerId);
-            if (customer == null) return NotFound();
-
-            var address = new Address(
+            var command = new AddAddressCommand(
+                customerId,
                 value.Street,
                 value.City,
                 value.ZipCode
                 );
 
-            customer.AddAddress(address);
-            customerRepository.Update(customer);
-            await unitOfWork.CommitAsync();
+            var result = await messages.Dispatch(command);
 
-            var addressDto = mapper.Map<AddressDto>(address);
-            return Ok(addressDto);
+            return result.Match<IActionResult>(
+                (errors) => BadRequest(errors),
+                (address) =>
+                {
+                    var addressDto = mapper.Map<AddressDto>(address);
+                    return Ok(addressDto);
+                });
+
         }
 
 
@@ -93,51 +113,47 @@ namespace API.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> EditCustomerInfo(long id, [FromBody] EditCustomerDto value)
         {
-            var command = new EditCustomerInfoCommand(id, 
+            var command = new EditCustomerInfoCommand(id,
                 value.FirstName,
                 value.LastName,
                 value.Age);
 
 
-            var handler = new EditCustomerInfoCommandHandler(unitOfWork);
-            var result = await handler.Handle(command);
+            var result = await messages.Dispatch(command);
 
-            
-            return result.Match<ActionResult>(
-                (errors)=>BadRequest(errors),
-                (valid)=>NoContent()
+
+            return result.Match<IActionResult>(
+                (errors) => BadRequest(errors),
+                (valid) => NoContent()
                 );
         }
 
         // DELETE: api/Customers/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCustomer(int id)
+        public async Task<IActionResult> DeleteCustomer(long id)
         {
-            var customer = await customerRepository.GetByIdAsync(id);
-            if (customer == null) return NotFound();
+            var command = new DeleteCustomerCommand(id);
 
-            customerRepository.Delete(customer);
-            await unitOfWork.CommitAsync();
+            var result = await messages.Dispatch(command);
 
-            return NoContent();
+            return result.Match<IActionResult>(
+                (errors) => BadRequest(errors),
+                (valid) => NoContent()
+                );
         }
 
         // DELETE: api/Customers/5/Addresses/1
         [HttpDelete("{customerId}/Addresses/{addressId}")]
         public async Task<IActionResult> RemoveAddress(long customerId, long addressId)
         {
-            var customer = await customerRepository.GetByIdAsync(customerId);
-            if (customer == null) return NotFound();
+            var command = new RemoveAddressCommand(customerId, addressId);
 
-            var address = customer.Addresses.SingleOrDefault(a => a.Id == addressId);
-            if (address == null) return NotFound();
+            var result = await messages.Dispatch(command);
 
-            customer.RemoveAddress(address);
-
-            customerRepository.Update(customer);
-            await unitOfWork.CommitAsync();
-
-            return NoContent();
+            return result.Match<IActionResult>(
+                (errors) => BadRequest(errors),
+                (valid) => NoContent()
+                );
         }
 
 

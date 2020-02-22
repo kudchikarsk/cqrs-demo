@@ -14,14 +14,24 @@ namespace Logic.Utils
             this.serviceProvider = serviceProvider;
         }
 
-        public TResult Dispatch<TResult>(ICommand command)
+        public TResult Dispatch<TResult>(ICommand<TResult> command)
         {
-            var argType = command.GetType();
             var type = typeof(ICommandHandler<,>);
-            var handlerType = type.MakeGenericType(argType, typeof(TResult));
+            var argTypes = new Type[] { command.GetType(), typeof(TResult) };
+            var handlerType = type.MakeGenericType(argTypes);
             dynamic handler = serviceProvider.GetService(handlerType);
-            TResult result = handler.Handle(command);
+            TResult result = handler.Handle((dynamic)command);
             return result;
         }
-}
+
+        public TResult Dispatch<TResult>(IQuery<TResult> query)
+        {
+            var type = typeof(IQueryHandler<,>);
+            var argTypes = new Type[] { query.GetType(), typeof(TResult) };
+            var handlerType = type.MakeGenericType(argTypes);
+            dynamic handler = serviceProvider.GetService(handlerType);
+            TResult result = handler.Handle((dynamic)query);
+            return result;
+        }
+    }
 }

@@ -12,24 +12,32 @@ namespace Logic.Utils
     {
         private readonly DbContext _dbContext;
         private readonly IDbContextTransaction _transaction;
-
-        public UnitOfWork(ApplicationDbContext dbContext)
+        private bool _isAlive = true;
+        public UnitOfWork(DbContextFactory dbContextFactory)
         {
-            _dbContext = dbContext;
-            _transaction = _dbContext.Database.BeginTransaction();
+            _dbContext = dbContextFactory.GetApplicationContext();
+            _transaction = _dbContext.Database.BeginTransaction(IsolationLevel.ReadCommitted);
         }
 
         public async Task CommitAsync()
         {
+            if (!_isAlive) return;
+
             try
             {
-                 await _dbContext.SaveChangesAsync();
-                 await _transaction.CommitAsync();
+                await _dbContext.SaveChangesAsync();
+                await _transaction.CommitAsync();
+            }
+            catch (Exception e)
+            {
+                await _transaction.RollbackAsync();
+                throw e;
             }
             finally
             {
+                _isAlive = false;
                 _transaction.Dispose();
-                _dbContext.Dispose();
+                _dbContext.Dispose();                
             }
 
         }
