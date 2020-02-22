@@ -25,6 +25,7 @@ export class EditCustomerComponent implements OnInit {
 
     addAddress() {
         this.customer.addresses.push({});
+        console.log(this.customer.addresses);
     }
 
     removeAddress(address) {
@@ -43,5 +44,4 @@ export class EditCustomerComponent implements OnInit {
                 console.log(err);
             });
     }
-
 }
