@@ -28,6 +28,7 @@ import { ViewCustomerComponent } from './view-customer/view-customer.component';
         { path: '', component: HomeComponent, pathMatch: 'full' },
         { path: 'add-customer', component: AddCustomerComponent },
         { path: 'edit-customer/:id', component: EditCustomerComponent },
+        { path: 'view-customer/:id', component: ViewCustomerComponent },
     ])
   ],
   providers: [],

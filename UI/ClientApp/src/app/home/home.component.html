@@ -25,6 +25,7 @@
           <td>{{customer.primaryAddress.city}}</td>
           <td>{{customer.primaryAddress.zipCode}}</td>
           <td>
+            <a [routerLink]="['/view-customer', customer.id]" class="btn btn-primary mr-2">View</a>
             <a [routerLink]="['/edit-customer', customer.id]" class="btn btn-primary mr-2">Edit</a>
             <button class="btn btn-danger mr-2" (click)="delete(customer)">Delete</button>
           </td>

@@ -1,1 +1,38 @@
-<p>view-customer works!</p>
+<div class="card mb-4">
+  <div class="card-body">
+    <dl class="row">
+      <dt class="col-sm-3">Name</dt>
+      <dd class="col-sm-9">{{customer.firstName}} {{customer.lastName}}</dd>
+
+      <dt class="col-sm-3">Age</dt>
+      <dd class="col-sm-9">{{ customer.age }}</dd>
+
+    </dl>
+
+  </div>
+  <div class="card-footer text-muted">
+    <a [routerLink]="['/edit-customer', customer.id]" class="btn btn-secondary float-right">Edit</a>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-6 mb-4" *ngFor="let address of customer.addresses">
+    <div class="card" style="height:250px;">
+      <div class="card-body">
+        <dl class="row">
+          <dt class="col-sm-3">Street</dt>
+          <dd class="col-sm-9">{{address.street}}</dd>
+
+          <dt class="col-sm-3">City</dt>
+          <dd class="col-sm-9">{{address.city}}</dd>
+
+          <dt class="col-sm-3">Zip Code</dt>
+          <dd class="col-sm-9">{{address.zipCode}}</dd>
+        </dl>
+      </div>
+     
+    </div>
+  </div>
+</div>
+
+
