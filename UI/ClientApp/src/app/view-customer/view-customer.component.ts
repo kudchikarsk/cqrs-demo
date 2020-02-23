@@ -47,4 +47,23 @@ export class ViewCustomerComponent implements OnInit {
                 console.log(err);
             });
     }
+
+    markPrimary(address) {
+
+        this.customerService.markPrimaryAddress(this.route.snapshot.params.id, address.id)
+            .subscribe(() => {
+                address.isPrimary = true;
+                this.customer.addresses
+                    .filter(a => a != address)
+                    .map(a => {
+                        a.isPrimary = false;
+                        return null;
+                    });
+            }, (err) => {
+                alert("Failed to load customer details");
+                console.log(err);
+            });
+
+        
+    }
 }

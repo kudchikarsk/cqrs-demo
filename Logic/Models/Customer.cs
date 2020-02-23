@@ -1,6 +1,7 @@
 ﻿using Logic.Utils;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Logic.Models
@@ -47,6 +48,12 @@ namespace Logic.Models
         public void RemoveAddress(Address address)
         {
             Addresses.Remove(address);
+        }
+
+        public void MarkPrimay(Address address)
+        {
+            Addresses.ToList().ForEach(a => a.RemovePrimay());
+            address.MarkPrimay();
         }
     }
 }

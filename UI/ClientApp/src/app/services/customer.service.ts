@@ -7,6 +7,7 @@ import { environment } from '../../environments/environment';
   providedIn: 'root'
 })
 export class CustomerService {
+    
 
     constructor(private http: HttpClient) { }
 
@@ -38,4 +39,7 @@ export class CustomerService {
         return this.http.delete(`${environment.apiUrl}api/customers/${customerId}/addresses/${addressId}`);
     }
 
+    markPrimaryAddress(customerId, addressId): Observable<any> {
+        return this.http.put(`${environment.apiUrl}api/customers/${customerId}/addresses/${addressId}/markPrimary`,null);
+    }
 }
