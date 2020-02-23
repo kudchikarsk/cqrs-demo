@@ -30,7 +30,10 @@
           <dd class="col-sm-9">{{address.zipCode}}</dd>
         </dl>
       </div>
-     
+      <div class="card-footer text-muted">
+        <button *ngIf="address.isPrimary" class="btn btn-success" disabled>Primary</button>
+        <div *ngIf="!address.isPrimary" style="height:38px;" ></div>
+      </div>
     </div>
   </div>
 </div>

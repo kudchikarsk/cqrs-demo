@@ -38,7 +38,7 @@ export class EditCustomerComponent implements OnInit {
     save() {
         this.customerService.update(this.route.snapshot.params.id, this.customer)
             .subscribe(() => {
-                this.router.navigateByUrl("/");
+                this.router.navigateByUrl(`/view-customer/${this.customer.id}`);
             }, (err) => {
                 alert("Failed to update customer details");
                 console.log(err);
