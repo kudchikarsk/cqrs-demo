@@ -7,10 +7,10 @@ namespace Logic.Models
 {
     public class Customer : BaseEntity<long>
     {
-        public          string                  FirstName   { get; private set; }
-        public          string                  LastName    { get; private set; }
-        public          int                     Age         { get; private set; }
-        public virtual  ICollection<Address>    Addresses   { get; private set; }
+        public string FirstName { get; private set; }
+        public string LastName { get; private set; }
+        public int Age { get; private set; }
+        public virtual ICollection<Address> Addresses { get; private set; }
 
         private Customer() //For EF
         {
@@ -18,16 +18,16 @@ namespace Logic.Models
         }
 
         public Customer(
-            string                  firstName   ,
-            string                  lastName    ,
-            int                     age         ,
-            ICollection<Address>    addresses   
+            string firstName,
+            string lastName,
+            int age,
+            ICollection<Address> addresses
             )
         {
-            FirstName   = firstName   ;
-            LastName    = lastName    ;
-            Age         = age         ;
-            Addresses   = addresses   ;
+            FirstName = firstName;
+            LastName = lastName;
+            Age = age;
+            Addresses = addresses;
         }
 
         public void Update(
@@ -43,7 +43,7 @@ namespace Logic.Models
             Addresses.Clear();
             foreach (var address in addresses)
             {
-                 Addresses.Add(address);
+                Addresses.Add(address);
             }
         }
     }
