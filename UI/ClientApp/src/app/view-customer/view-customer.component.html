@@ -31,13 +31,15 @@
         </dl>
       </div>
       <div class="card-footer text-muted">
+        <button *ngIf="!address.isPrimary" class="btn btn-primary" (click)="markPrimary(address)">Set As Primary</button>
+        <button *ngIf="address.isPrimary" class="btn btn-success" disabled>Primary</button>
         <button class="btn btn-danger float-right" (click)="removeAddress(address)">Remove</button>
       </div>
     </div>
   </div>
   <div class="col-6">
     <div class="card p-5" style="height:250px;">
-      <button class="btn btn-secondary mx-auto my-5" data-toggle="modal" data-target="#exampleModal">Add</button>
+      <button class="btn btn-secondary mx-auto my-5" data-toggle="modal" data-target="#exampleModal">Add New Address</button>
     </div>
   </div>
 </div>

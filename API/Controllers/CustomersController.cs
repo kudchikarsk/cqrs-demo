@@ -107,6 +107,24 @@ namespace API.Controllers
 
         }
 
+        // Put: api/Customers/5/Addresses/1/MarkPrimay
+        [HttpPut("{customerId}/Addresses/{addressId}/MarkPrimary")]
+        public async Task<IActionResult> MarkPrimary(long customerId, long addressId)
+        {
+            var customer = await customerRepository.GetByIdAsync(customerId);
+            if (customer == null) return NotFound();
+
+            var address = customer.Addresses.SingleOrDefault(a => a.Id == addressId);
+            if (address == null) return NotFound();
+
+            customer.MarkPrimay(address);
+
+            customerRepository.Update(customer);
+            await unitOfWork.CommitAsync();
+
+            return NoContent();
+        }
+
 
 
         // PUT: api/Customers/5
