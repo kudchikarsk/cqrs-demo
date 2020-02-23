@@ -10,6 +10,9 @@
           <th scope="col">#</th>
           <th scope="col">Name</th>
           <th scope="col">Age</th>
+          <th scope="col">Street</th>
+          <th scope="col">City</th>
+          <th scope="col">Zip Code</th>
           <th scope="col">Actions</th>
         </tr>
       </thead>
@@ -18,6 +21,9 @@
           <th scope="row">{{i+1}}</th>
           <td>{{customer.firstName}} {{customer.lastName}}</td>
           <td>{{customer.age}}</td>
+          <td>{{customer.primaryAddress.street}}</td>
+          <td>{{customer.primaryAddress.city}}</td>
+          <td>{{customer.primaryAddress.zipCode}}</td>
           <td>
             <a [routerLink]="['/edit-customer', customer.id]" class="btn btn-primary mr-2">Edit</a>
             <button class="btn btn-danger mr-2" (click)="delete(customer)">Delete</button>

@@ -44,4 +44,13 @@ export class EditCustomerComponent implements OnInit {
                 console.log(err);
             });
     }
+
+    markedPrimary(address) {
+        this.customer.addresses
+            .filter(a => a != address)
+            .map(a => {
+                a.isPrimary = false;
+                return null;
+            });
+    }
 }

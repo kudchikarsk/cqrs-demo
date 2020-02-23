@@ -34,6 +34,13 @@
             <label for="inputZip">Zip</label>
             <input type="text" class="form-control" id="inputZip" placeholder="6789" [(ngModel)]="address.zipCode" name="zipCode-{{i}}">
           </div>
+
+          <div class="form-check form-group col-md-2 ml-4">
+            <input class="form-check-input" type="checkbox" value="" id="defaultCheck1" [(ngModel)]="address.isPrimary" name="isPrimary-{{i}}" (change)="markedPrimary(address)">
+            <label class="form-check-label" for="defaultCheck1">
+              Is Primary
+            </label>
+          </div>
         </div>
 
       </div>

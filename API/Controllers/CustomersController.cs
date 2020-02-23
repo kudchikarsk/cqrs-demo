@@ -104,7 +104,8 @@ namespace API.Controllers
                 return new Address(
                     a.Street,
                     a.City,
-                    a.ZipCode
+                    a.ZipCode,
+                    a.IsPrimary
                     );
             }).ToList();
         }

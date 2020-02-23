@@ -21,12 +21,12 @@
     <div class="card mb-2" *ngFor="let address of customer.addresses; let i = index;">
       <div class="card-body">
         <div class="form-row">
-          <div class="form-group col-md-6">
+          <div class="form-group col-md-5">
             <label for="inputAddress">Address</label>
             <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St" [(ngModel)]="address.street" name="street-{{i}}">
           </div>
 
-          <div class="form-group col-md-4">
+          <div class="form-group col-md-3">
             <label for="inputCity">City</label>
             <input type="text" class="form-control" id="inputCity" placeholder="Boston" [(ngModel)]="address.city" name="city-{{i}}">
           </div>
@@ -37,6 +37,12 @@
           </div>
         </div>
 
+        <div class="form-check form-group col-md-2 ml-4">
+          <input class="form-check-input" type="checkbox" value="" id="defaultCheck1" [(ngModel)]="address.isPrimary" name="isPrimary-{{i}}" (change)="markedPrimary(address)">
+          <label class="form-check-label" for="defaultCheck1">
+            Is Primary
+          </label>
+        </div>
       </div>
       <div class="card-footer">
         <button type="submit" class="btn btn-danger float-right" (click)="removeAddress(address)">Remove</button>

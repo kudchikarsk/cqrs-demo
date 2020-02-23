@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
 })
 export class AddCustomerComponent implements OnInit {
     customer = {
-        addresses: [{}]
+        addresses: [{ isPrimary:false}]
     };
 
     constructor(private customerService: CustomerService,
@@ -19,7 +19,7 @@ export class AddCustomerComponent implements OnInit {
     }
 
     addAddress() {
-        this.customer.addresses.push({});
+        this.customer.addresses.push({ isPrimary: false});
     }
 
     removeAddress(address) {
@@ -36,6 +36,15 @@ export class AddCustomerComponent implements OnInit {
             }, (err) => {
                 alert(`Failed to create customer`);
                 console.log(err);
+            });
+    }
+
+    markedPrimary(address) {
+        this.customer.addresses
+            .filter(a => a != address)
+            .map(a => {
+                a.isPrimary = false;
+                return null;
             });
     }
 
