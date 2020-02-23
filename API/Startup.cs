@@ -26,6 +26,7 @@ using static Logic.AppServices.DeleteCustomerCommand;
 using static Logic.AppServices.EditCustomerInfoCommand;
 using static Logic.AppServices.GetAllCustomerQuery;
 using static Logic.AppServices.GetCustomerQuery;
+using static Logic.AppServices.MarkAddressPrimaryCommand;
 using static Logic.AppServices.RemoveAddressCommand;
 using Unit = System.ValueTuple;
 
@@ -59,6 +60,8 @@ namespace API
                 DeleteCustomerCommandHandler>();
             services.AddTransient<ICommandHandler<AddAddressCommand, Task<Validation<Address>>>,
                 AddAddressCommandHandler>();
+            services.AddTransient<ICommandHandler<MarkAddressPrimaryCommand, Task<Validation<Unit>>>,
+                MarkPrimaryAddressCommandHandler>();
             services.AddTransient<ICommandHandler<RemoveAddressCommand, Task<Validation<Unit>>>,
                 RemoveAddressCommandHandler>();
 

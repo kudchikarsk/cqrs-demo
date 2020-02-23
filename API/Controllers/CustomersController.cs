@@ -111,18 +111,14 @@ namespace API.Controllers
         [HttpPut("{customerId}/Addresses/{addressId}/MarkPrimary")]
         public async Task<IActionResult> MarkPrimary(long customerId, long addressId)
         {
-            var customer = await customerRepository.GetByIdAsync(customerId);
-            if (customer == null) return NotFound();
+            var command = new MarkAddressPrimaryCommand(customerId, addressId);
 
-            var address = customer.Addresses.SingleOrDefault(a => a.Id == addressId);
-            if (address == null) return NotFound();
+            var result = await messages.Dispatch(command);
 
-            customer.MarkPrimay(address);
-
-            customerRepository.Update(customer);
-            await unitOfWork.CommitAsync();
-
-            return NoContent();
+            return result.Match<IActionResult>(
+                (errors) => BadRequest(errors),
+                (valid) => NoContent()
+                );
         }
 
 
