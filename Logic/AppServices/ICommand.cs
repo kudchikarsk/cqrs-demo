@@ -4,8 +4,8 @@
     {
     }
 
-    public interface ICommandHandler<T, TOutput> where T : ICommand<TOutput>
+    public interface ICommandHandler<TCommand, TOutput> where TCommand : ICommand<TOutput>
     {
-        TOutput Handle(T command);
+        TOutput Handle(TCommand command);
     }
 }

@@ -8,8 +8,8 @@ namespace Logic.AppServices
     {
     }
 
-    public interface IQueryHandler<T, TResult> where T : IQuery<TResult>
+    public interface IQueryHandler<TQuery, TResult> where TQuery : IQuery<TResult>
     {
-        TResult Handle(T query);
+        TResult Handle(TQuery query);
     }
 }
