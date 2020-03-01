@@ -1,5 +1,6 @@
 ﻿using LaYumba.Functional;
 using Logic.Data;
+using Logic.Decorators;
 using Logic.Models;
 using Logic.Repositories;
 using Logic.Utils;
@@ -27,6 +28,8 @@ namespace Logic.AppServices
         public string LastName { get; }
         public int Age { get; }
 
+        [AuditLog]
+        [DatabaseRetry]
         public sealed class EditCustomerInfoCommandHandler : ICommandHandler<EditCustomerInfoCommand, Task<Validation<Unit>>>
         {
             private readonly DbContextFactory dbContextFactory;

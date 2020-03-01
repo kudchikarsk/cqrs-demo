@@ -13,6 +13,7 @@ using Logic.Repositories;
 using Logic.Utils;
 using Microsoft.AspNetCore.Mvc;
 using static Logic.AppServices.EditCustomerInfoCommand;
+using Logic.Decorators;
 
 namespace API.Controllers
 {
@@ -123,7 +124,7 @@ namespace API.Controllers
 
 
 
-        // PUT: api/Customers/5
+        // PUT: api/Customers/5        
         [HttpPut("{id}")]
         public async Task<IActionResult> EditCustomerInfo(long id, [FromBody] EditCustomerDto value)
         {

@@ -53,12 +53,16 @@ namespace API
             services.AddSingleton<Messages>();
 
             //Handlers
-            services.AddTransient<ICommandHandler<CreateCustomerCommand, Task<Validation<Customer>>>>(provider =>
+            services.AddTransient<ICommandHandler<CreateCustomerCommand, Task<Validation<Customer>>>,
+                CreateCustomerCommandHandler>();            
+            services.AddTransient<ICommandHandler<EditCustomerInfoCommand, Task<Validation<Unit>>>>(provider =>
             {
-                return new DatabaseRetryDecorator<CreateCustomerCommand, Task<Validation<Customer>>>(
-                            new CreateCustomerCommandHandler(provider.GetService<DbContextFactory>()),
-                            provider.GetService<Config>()
-                        );
+                return new AuditLoggingDecorator<EditCustomerInfoCommand, Task<Validation<Unit>>>(
+                            new DatabaseRetryDecorator<EditCustomerInfoCommand, Task<Validation<Unit>>>(
+                                new EditCustomerInfoCommandHandler(provider.GetService<DbContextFactory>()),
+                                provider.GetService<Config>()
+                        )
+                    );
             });
             services.AddTransient<ICommandHandler<EditCustomerInfoCommand, Task<Validation<Unit>>>,
                 EditCustomerInfoCommandHandler>();
