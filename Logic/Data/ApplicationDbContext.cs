@@ -1,4 +1,5 @@
 ﻿using Logic.Models;
+using Logic.Utils;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -32,15 +33,5 @@ namespace Logic.Data
             builder.UseSqlServer(connectionString.Value);
             return new ApplicationDbContext(builder.Options);
         }
-    }
-
-    public class ConnectionString
-    {
-        public ConnectionString(string value)
-        {
-            Value = value;
-        }
-
-        public string Value { get; }
     }
 }

@@ -7,6 +7,7 @@ using LaYumba.Functional;
 using Logic;
 using Logic.AppServices;
 using Logic.Data;
+using Logic.Decorators;
 using Logic.Models;
 using Logic.Utils;
 using Microsoft.AspNetCore.Builder;
@@ -48,12 +49,17 @@ namespace API
             var connectionString = new ConnectionString(
                 Configuration.GetConnectionString("ApplicationDbContext"));
             services.AddSingleton<ConnectionString>(connectionString);
-            services.AddSingleton<DbContextFactory>();           
+            services.AddSingleton<DbContextFactory>();
             services.AddSingleton<Messages>();
 
             //Handlers
-            services.AddTransient<ICommandHandler<CreateCustomerCommand, Task<Validation<Customer>>>,
-                CreateCustomerCommandHandler>();
+            services.AddTransient<ICommandHandler<CreateCustomerCommand, Task<Validation<Customer>>>>(provider =>
+            {
+                return new DatabaseRetryDecorator<CreateCustomerCommand, Task<Validation<Customer>>>(
+                            provider.GetService<CreateCustomerCommandHandler>(),
+                            provider.GetService<Config>()
+                        );
+            });
             services.AddTransient<ICommandHandler<EditCustomerInfoCommand, Task<Validation<Unit>>>,
                 EditCustomerInfoCommandHandler>();
             services.AddTransient<ICommandHandler<DeleteCustomerCommand, Task<Validation<Unit>>>,
