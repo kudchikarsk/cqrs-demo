@@ -2,9 +2,9 @@
 {
     public class Config
     {
-        public Config(int value)
+        public Config(int numberOfDatabaseRetries)
         {
-            NumberOfDatabaseRetries = value;
+            NumberOfDatabaseRetries = numberOfDatabaseRetries;
         }
 
         public int NumberOfDatabaseRetries { get; }

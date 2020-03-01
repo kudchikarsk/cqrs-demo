@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Api.Utils;
 using AutoMapper;
 using LaYumba.Functional;
 using Logic;
@@ -46,40 +47,16 @@ namespace API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+           
             var connectionString = new ConnectionString(
                 Configuration.GetConnectionString("ApplicationDbContext"));
+            var config = new Config(Configuration.GetValue<int>("NumberOfDatabaseRetries"));
+
             services.AddSingleton<ConnectionString>(connectionString);
+            services.AddSingleton<Config>(config);
             services.AddSingleton<DbContextFactory>();
             services.AddSingleton<Messages>();
-
-            //Handlers
-            services.AddTransient<ICommandHandler<CreateCustomerCommand, Task<Validation<Customer>>>,
-                CreateCustomerCommandHandler>();            
-            services.AddTransient<ICommandHandler<EditCustomerInfoCommand, Task<Validation<Unit>>>>(provider =>
-            {
-                return new AuditLoggingDecorator<EditCustomerInfoCommand, Task<Validation<Unit>>>(
-                            new DatabaseRetryDecorator<EditCustomerInfoCommand, Task<Validation<Unit>>>(
-                                new EditCustomerInfoCommandHandler(provider.GetService<DbContextFactory>()),
-                                provider.GetService<Config>()
-                        )
-                    );
-            });
-            services.AddTransient<ICommandHandler<EditCustomerInfoCommand, Task<Validation<Unit>>>,
-                EditCustomerInfoCommandHandler>();
-            services.AddTransient<ICommandHandler<DeleteCustomerCommand, Task<Validation<Unit>>>,
-                DeleteCustomerCommandHandler>();
-            services.AddTransient<ICommandHandler<AddAddressCommand, Task<Validation<Address>>>,
-                AddAddressCommandHandler>();
-            services.AddTransient<ICommandHandler<MarkAddressPrimaryCommand, Task<Validation<Unit>>>,
-                MarkPrimaryAddressCommandHandler>();
-            services.AddTransient<ICommandHandler<RemoveAddressCommand, Task<Validation<Unit>>>,
-                RemoveAddressCommandHandler>();
-
-            //Queries
-            services.AddTransient<IQueryHandler<GetCustomerQuery, Task<Validation<Customer>>>,
-                GetCustomerQueryHandler>();
-            services.AddTransient<IQueryHandler<GetAllCustomerQuery, Task<Validation<IReadOnlyCollection<Customer>>>>,
-                GetAllCustomerQueryHandler>();
+            services.AddHandlers();            
 
 
             services.AddCors(options =>
