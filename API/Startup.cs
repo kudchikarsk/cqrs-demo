@@ -56,7 +56,7 @@ namespace API
             services.AddTransient<ICommandHandler<CreateCustomerCommand, Task<Validation<Customer>>>>(provider =>
             {
                 return new DatabaseRetryDecorator<CreateCustomerCommand, Task<Validation<Customer>>>(
-                            provider.GetService<CreateCustomerCommandHandler>(),
+                            new CreateCustomerCommandHandler(provider.GetService<DbContextFactory>()),
                             provider.GetService<Config>()
                         );
             });
