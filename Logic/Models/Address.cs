@@ -8,6 +8,7 @@ namespace Logic.Models
         public string City { get; private set; }
         public string ZipCode { get; private set; }
         public bool IsPrimary { get; private set; }
+        public long CustomerId { get; set; }
         public virtual Customer Customer { get; private set; }
 
         private Address() //For EF
