@@ -19,11 +19,11 @@
       <tbody>
         <tr *ngFor="let customer of customers; let i = index">
           <th scope="row">{{i+1}}</th>
-          <td>{{customer.firstName}} {{customer.lastName}}</td>
+          <td>{{customer.name}}</td>
           <td>{{customer.age}}</td>         
-          <td>{{customer.primaryAddress.street}}</td>
-          <td>{{customer.primaryAddress.city}}</td>
-          <td>{{customer.primaryAddress.zipCode}}</td>
+          <td>{{customer.street}}</td>
+          <td>{{customer.city}}</td>
+          <td>{{customer.zipCode}}</td>
           <td>
             <a [routerLink]="['/view-customer', customer.id]" class="btn btn-primary mr-2">View</a>
             <a [routerLink]="['/edit-customer', customer.id]" class="btn btn-primary mr-2">Edit</a>
