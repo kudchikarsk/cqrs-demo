@@ -12,11 +12,15 @@ namespace Logic.Dtos
         public string LastName { get; set; }
         public int Age { get; set; }
         public virtual ICollection<AddressDto> Addresses { get; set; }
+    }
 
-        public AddressDto PrimaryAddress =>
-            Addresses.FirstOrDefault(a => a.IsPrimary)
-            ?? Addresses.FirstOrDefault()
-            ?? new AddressDto();
+    public class CustomerInfoDto
+    {
+        public long Id { get; set; }
+        public string Name { get; set; }
+        public string Street { get; set; }
+        public string City { get; set; }
+        public string ZipCode { get; set; }
     }
 
     public class CreateCustomerDto

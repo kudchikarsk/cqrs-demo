@@ -41,9 +41,8 @@ namespace API.Controllers
             return result.Match<IActionResult>(
                 (errors) => BadRequest(errors),
                 (customers) =>
-                {
-                    var customersDto = mapper.Map<List<CustomerDto>>(customers);
-                    return Ok(customersDto);
+                {                   
+                    return Ok(customers);
                 });
         }
 
