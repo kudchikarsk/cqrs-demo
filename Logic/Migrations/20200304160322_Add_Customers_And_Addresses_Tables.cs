@@ -2,7 +2,7 @@
 
 namespace Logic.Migrations
 {
-    public partial class Add_Customers_Addresses_Tables : Migration
+    public partial class Add_Customers_And_Addresses_Tables : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -30,7 +30,8 @@ namespace Logic.Migrations
                     Street = table.Column<string>(nullable: true),
                     City = table.Column<string>(nullable: true),
                     ZipCode = table.Column<string>(nullable: true),
-                    CustomerId = table.Column<long>(nullable: true)
+                    IsPrimary = table.Column<bool>(nullable: false),
+                    CustomerId = table.Column<long>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -40,7 +41,7 @@ namespace Logic.Migrations
                         column: x => x.CustomerId,
                         principalTable: "Customers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
