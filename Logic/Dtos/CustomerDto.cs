@@ -14,15 +14,7 @@ namespace Logic.Dtos
         public virtual ICollection<AddressDto> Addresses { get; set; }
     }
 
-    public class CustomerInfoDto
-    {
-        public long Id { get; set; }
-        public string Name { get; set; }
-        public int Age { get; set; }
-        public string Street { get; set; }
-        public string City { get; set; }
-        public string ZipCode { get; set; }
-    }
+    
 
     public class CreateCustomerDto
     {
