@@ -39,14 +39,6 @@ namespace Logic.Repositories
         {
             _unitOfWork.Delete(customer);
         }
-
-        public async Task<IReadOnlyCollection<Customer>> GetAll()
-        {
-            return await _unitOfWork.Query<Customer>()
-                .Include(nameof(Customer.Addresses))
-                .ToListAsync();
-        }
-
         
     }
 }
